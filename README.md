@@ -3,7 +3,7 @@
 > 基于 Claude Code 的三层架构自动化产品开发系统。从模糊想法到可交付代码，全流程 Skill 驱动。
 
 ```
-Skill 管流程  ·  Agent 管执行  ·  Hook 负责兜底  ·  进化管成长
+Skill 管流程  ·  Agent 管执行  ·  Hook 负责兜底  · Feedback 管成长
 ```
 
 ---
