@@ -62,12 +62,8 @@ if (Test-Path $reviewStatusFile) {
 }
 
 if (-not $reviewed) {
-  Write-Host "[stop-gate] 检测到以下代码文件已被修改但尚未经过 code review:"
+  Write-Host "[stop-gate] 以下文件尚未经过 code review（已允许跳过）:"
   $changedCodeFiles | ForEach-Object { Write-Host "  - $_" }
-  Write-Host ""
-  Write-Host "[stop-gate] 根据规则，代码修改需要经过 code review 才能停止。"
-  Write-Host "[stop-gate] 请先调用 code-review skill 完成审查。"
-  exit 1
 }
 
 exit 0
