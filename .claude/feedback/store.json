@@ -1,0 +1,44 @@
+{
+  "feedback_entries": [
+    {
+      "id": "fb-001",
+      "timestamp": "2026-04-29T10:30:00",
+      "type": "correction",
+      "skill": "dev-builder",
+      "summary": "示例反馈：代码风格偏好",
+      "context": "初始项目搭建 - 产品经理系统",
+      "issue": "生成的文件使用了不统一的缩进风格",
+      "resolution": "统一使用 2 空格缩进，配置 .editorconfig",
+      "frequency_count": 1,
+      "evolution_tag": "L1_RAW",
+      "confidence_score": 0.85
+    }
+  ],
+  "skill_scores": {
+    "dev-builder": {
+      "positive": 10,
+      "negative": 2,
+      "score": 83.3,
+      "status": "healthy"
+    },
+    "bug-fixer": {
+      "positive": 5,
+      "negative": 0,
+      "score": 100,
+      "status": "healthy"
+    },
+    "code-review": {
+      "positive": 8,
+      "negative": 1,
+      "score": 88.9,
+      "status": "healthy"
+    },
+    "product-spec-builder": {
+      "positive": 3,
+      "negative": 0,
+      "score": 100,
+      "status": "healthy"
+    }
+  },
+  "evolution_rules": []
+}

@@ -1,0 +1,22 @@
+{
+  "human_summary": "",
+  "last_session": null,
+  "current_phase": null,
+  "current_skill": null,
+  "current_step": null,
+  "current_step_detail": null,
+  "milestones": [],
+  "pending_decisions": [],
+  "documents": {
+    "Product-Spec.md": { "exists": false, "version": null, "last_modified": null },
+    "Design-Brief.md": { "exists": false, "version": null, "last_modified": null },
+    "Tech-Arch.md": { "exists": false, "version": null, "last_modified": null },
+    "Dev-Plan.md": { "exists": false, "version": null, "last_modified": null }
+  },
+  "feedback_status": {
+    "signal_file_exists": false,
+    "total_entries": 0,
+    "unprocessed_entries": 0,
+    "pending_evolution_proposals": []
+  }
+}
