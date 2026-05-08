@@ -119,10 +119,10 @@ description: 设计执行。基于 Design-Brief.md 产出原型、设计稿或�
 4. 使用设计规范中定义的具体色值和参数
 5. 完成后回写 Design-Brief.md「设计交付物」表格
 
-可用的设计资源路径（如果存在）：
-- `F:\Dev\Agent Skills\anthropics-skills\skills\frontend-design\` — 前端设计实现参考
-- `F:\Dev\Agent Skills\anthropics-skills\skills\canvas-design\` — 视觉设计输出参考
-- `F:\Dev\Agent Skills\ui-ux-pro-max-skill\` — 设计系统、品牌规范参考
+可用的设计资源（离线参考）：
+- [frontend-design](references/anthropics-skills/frontend-design.md) — 前端设计实现参考
+- [canvas-design](references/anthropics-skills/canvas-design.md) — 视觉设计输出参考
+- [ui-ux-pro-max-skill](references/ui-ux-pro-max-skill/SKILL.md) — 设计系统、品牌规范参考
 
 #### D. Canvas 设计稿
 

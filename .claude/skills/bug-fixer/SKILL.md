@@ -82,4 +82,4 @@ description: 系统化调试修复 Bug。铁律：先收集证据再修复，禁
 - 验证结果
 
 ## 参考资源
-- `F:\Dev\Agent Skills\superpowers\skills\systematic-debugging\SKILL.md` — 系统化调试方法论（本技能基于此）
+- [systematic-debugging](references/superpowers/systematic-debugging.md) — 系统化调试方法论（本技能基于此）

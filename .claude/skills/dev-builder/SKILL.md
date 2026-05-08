@@ -50,9 +50,9 @@ description: 根据开发计划编写代码。按任务调度 implementer sub-ag
 - `Dev-Plan.md` — 更新任务完成状态
 
 ## 参考资源
-- `F:\Dev\Agent Skills\superpowers\skills\subagent-driven-development\SKILL.md` — Sub-agent 驱动开发模式
-- `F:\Dev\Agent Skills\andrej-karpathy-skills\` — 编程准则
-- `.claude\agents\implementer.md` — 实现者 sub-agent 定义
+- [subagent-driven-development](references/superpowers/subagent-driven-development.md) — Sub-agent 驱动开发模式
+- [karpathy-guidelines](references/andrej-karpathy-skills/karpathy-guidelines.md) — 编程准则
+- `.claude/agents/implementer.md` — 实现者 sub-agent 定义
 - `Dev-Plan.md` — 任务清单
 
 ## 注意
