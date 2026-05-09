@@ -2,23 +2,51 @@
 .SYNOPSIS
   Detect feedback signal hook
 .DESCRIPTION
-  自动检测用户消息中的修正/不满/偏好关键词。
-  检测到后写入 .signal.tmp 文件，提醒主 agent 记录反馈。
-  反馈记录是半自动的 —— 系统自动捕捉关键词，用户无需手动说"记下来"。
-.PARAMETER UserInput
-  用户的输入文本
+  Claude Code：stdin JSON（字段 prompt）。本地验证推荐在同一 PowerShell 会话中：
+    & "$PSScriptRoot\detect-feedback-signal.ps1" -UserInput (Get-Content .\hook.json -Raw -Encoding utf8)
+  不要用嵌套的 `powershell -File ... -UserInput "<很长 JSON>"`，进程参数解析可能截断。
+  管道传入脚本时，顶层 `$input` 可能为空；Claude Code 使用进程 stdin，不依赖 PowerShell 管道。
 #>
 
 param([string]$UserInput = "")
 
 $ErrorActionPreference = "Continue"
 
-if ([string]::IsNullOrWhiteSpace($UserInput)) {
+$rawJson = $UserInput
+if ([string]::IsNullOrWhiteSpace($rawJson)) {
+  $piped = @($input)
+  if ($piped.Count -gt 0) {
+    $rawJson = ($piped | ForEach-Object { "$_" }) -join ""
+  }
+  elseif ([Console]::IsInputRedirected) {
+    try {
+      if ([Console]::In.Peek() -ne -1) {
+        $rawJson = [Console]::In.ReadToEnd()
+      }
+    } catch {
+      $rawJson = ""
+    }
+  }
+}
+
+$promptText = ""
+if (-not [string]::IsNullOrWhiteSpace($rawJson)) {
+  try {
+    $obj = $rawJson | ConvertFrom-Json
+    if ($null -ne $obj.prompt) {
+      $promptText = [string]$obj.prompt
+    }
+  } catch {
+    $promptText = ""
+  }
+}
+
+$promptText = $promptText.Trim()
+if ([string]::IsNullOrWhiteSpace($promptText)) {
   exit 0
 }
 
 $keywords = @{
-  # 修正类
   "改一下"   = "correction"
   "改成"     = "correction"
   "换成"     = "correction"
@@ -31,7 +59,6 @@ $keywords = @{
   "重新"     = "correction"
   "修改"     = "correction"
   "重写"     = "correction"
-  # 不满类
   "不好"     = "dissatisfaction"
   "不满意"   = "dissatisfaction"
   "不要"     = "dissatisfaction"
@@ -41,7 +68,6 @@ $keywords = @{
   "太丑"     = "dissatisfaction"
   "难用"     = "dissatisfaction"
   "麻烦"     = "dissatisfaction"
-  # 偏好类
   "应该"     = "preference"
   "更喜欢"   = "preference"
   "最好是"   = "preference"
@@ -50,21 +76,19 @@ $keywords = @{
   "需要"     = "preference"
   "能不能"   = "preference"
   "可不可以" = "preference"
-  # 建议类
   "建议"     = "suggestion"
   "改进"     = "suggestion"
   "优化"     = "suggestion"
   "简化"     = "suggestion"
   "想法"     = "suggestion"
   "以后"     = "suggestion"
-  # 偏好类（续）
   "记得"     = "preference"
 }
 
 $detectedSignals = @()
 
 foreach ($kw in $keywords.Keys) {
-  if ($UserInput -match $kw) {
+  if ($promptText -match [regex]::Escape($kw)) {
     $detectedSignals += @{
       keyword = $kw
       type    = $keywords[$kw]
@@ -78,13 +102,12 @@ if ($detectedSignals.Count -gt 0) {
 
   $content = @{
     timestamp = (Get-Date -Format "yyyy-MM-ddTHH:mm:ss")
-    signals   = $detectedSignals
-    raw_input = $UserInput.Substring(0, [Math]::Min(200, $UserInput.Length))
-  } | ConvertTo-Json -Compress
+    signals   = @($detectedSignals)
+    raw_input = $promptText.Substring(0, [Math]::Min(200, $promptText.Length))
+  } | ConvertTo-Json -Compress -Depth 6
 
   $content | Out-File -FilePath $signalFile -Encoding utf8 -Force
 
-  # 输出提醒，主 agent 会在会话中看到
   $signalTypes = ($detectedSignals | ForEach-Object { $_.type } | Select-Object -Unique) -join ", "
   Write-Host "[feedback-signal] 检测到反馈信号 (类型: $signalTypes)，已写入 .signal.tmp"
 }

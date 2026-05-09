@@ -17,7 +17,7 @@ $hasCsproj      = Get-ChildItem "$rootDir" -Filter "*.csproj" -Recurse -ErrorAct
 $hasSln         = Get-ChildItem "$rootDir" -Filter "*.sln" -ErrorAction SilentlyContinue
 $hasCargoToml   = Test-Path "$rootDir\Cargo.toml"
 $hasGoMod       = Test-Path "$rootDir\go.mod"
-$hasPyProject   = Test-Path "$rootDir\pyproject.toml" -or (Test-Path "$rootDir\setup.py")
+$hasPyProject   = (Test-Path "$rootDir\pyproject.toml") -or (Test-Path "$rootDir\setup.py")
 
 $buildFailed = $false
 
