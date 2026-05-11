@@ -136,4 +136,4 @@ feedback 内容：
 - 改动 >20 行或涉及接口变更时，触发 code-review
 
 ## 参考资源
-- [systematic-debugging](references/superpowers/systematic-debugging.md) — 系统化调试方法论（本技能基于此）
+- [systematic-debugging](../../references/superpowers/systematic-debugging.md) — 系统化调试方法论（本技能基于此）

@@ -78,6 +78,6 @@ code-reviewer 在审查时，如果任务涉及 UI 实现，**必须**检查以�
 
 ## 参考资源
 - `.claude/agents/code-reviewer.md` — 审查者 sub-agent 定义
-- [code-review-skill](references/code-review-skill/SKILL.md) — 多技术栈审查规则
-- [requesting-code-review](references/superpowers/requesting-code-review.md) — 审查请求流程
-- [code-reviewer](references/superpowers/code-reviewer.md) — 审查者角色参考
+- [code-review-skill](../../references/code-review-skill/SKILL.md) — 多技术栈审查规则
+- [requesting-code-review](../../references/superpowers/requesting-code-review.md) — 审查请求流程
+- [code-reviewer](../../references/superpowers/code-reviewer.md) — 审查者角色参考
