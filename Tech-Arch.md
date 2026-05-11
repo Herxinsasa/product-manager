@@ -68,17 +68,32 @@
 
 ## 5. 目录结构设计
 
-<!--
+```
 <project-name>/
-├── src/
-│   ├── main/           # 主进程 / 页面入口
-│   ├── renderer/       # 渲染进程 / 组件
-│   ├── shared/         # 共享类型、常量、工具
+├── CLAUDE.md                    # AI 入口：项目上下文，自动加载
+├── README.md                    # 人类入口：简介、快速启动
+│
+├── src/                         # 源代码
+│   ├── components/              # 业务组件 / 页面
+│   ├── shared/                  # 共享类型、常量、工具
 │   └── ...
-├── tests/
-├── docs/
-└── ...
--->
+│
+├── docs/                        # 项目文档
+│   ├── architecture/            # 架构层 — 系统是什么样的
+│   │   └── overview.md          # 系统架构总览（含 Mermaid 图）
+│   ├── modules/                 # 模块层 — 代码的文档镜像
+│   │   └── <模块名>/
+│   │       └── README.md        # 模块设计详情
+│   ├── guides/                  # 操作层 — 怎么做
+│   │   ├── development.md       # 开发环境搭建
+│   │   ├── testing.md           # 测试策略与规范
+│   │   └── build-and-deploy.md  # 构建与部署
+│   └── glossary.md             # 业务术语表（引用 Product-Spec 领域术语）
+│
+├── tests/                       # 测试
+├── scripts/                     # 脚本（CI / 部署 / 自动化）
+└── design/                      # 设计交付物（Pencil / Figma / 原型）
+```
 
 ## 6. 数据流设计
 
