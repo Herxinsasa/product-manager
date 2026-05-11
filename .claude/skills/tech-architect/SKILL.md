@@ -193,14 +193,29 @@ description: 技术架构设计。调研技术方案、评估开源项目、输�
 
 ```
 <project-name>/
-├── src/
-│   ├── main/           # 主进程（Electron）或 页面（Web）
-│   ├── renderer/       # 渲染进程（Electron）或 组件（Web）
-│   ├── shared/         # 共享类型、常量、工具
+├── CLAUDE.md                    # AI 入口：项目上下文，自动加载
+├── README.md                    # 人类入口：简介、快速启动
+│
+├── src/                         # 源代码
+│   ├── components/              # 业务组件 / 页面
+│   ├── shared/                  # 共享类型、常量、工具
 │   └── ...
-├── tests/
-├── docs/
-└── ...
+│
+├── docs/                        # 项目文档
+│   ├── architecture/            # 架构层
+│   │   └── overview.md
+│   ├── modules/                 # 模块层（按功能模块组织）
+│   │   └── <module>/
+│   │       └── README.md
+│   ├── guides/                  # 操作层
+│   │   ├── development.md
+│   │   ├── testing.md
+│   │   └── build-and-deploy.md
+│   └── glossary.md             # 术语表（引用 Product-Spec 领域术语）
+│
+├── tests/                       # 测试
+├── scripts/                     # 脚本（CI / 部署 / 自动化）
+└── design/                      # 设计交付物（Pencil / Figma / 原型）
 ```
 
 #### 4.3 数据流设计
