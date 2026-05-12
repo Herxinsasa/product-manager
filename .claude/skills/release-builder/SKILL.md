@@ -45,4 +45,4 @@ description: 构建、发布和上线收尾。代码审查通过后处理构建�
 - 项目状态更新
 
 ## 参考资源
-- [finishing-a-development-branch](references/superpowers/finishing-a-development-branch.md) — 分支完成流程
+- [finishing-a-development-branch](../../references/superpowers/finishing-a-development-branch.md) — 分支完成流程
