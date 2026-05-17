@@ -399,12 +399,3 @@ code-review 视觉一致性检查清单
 | 8 | **需求对齐审查** | 每个任务完成后对照验收标准逐条确认 |
 | 9 | **渐进进化** | 每次优化一步，所有修改需人确认 |
 
----
-
-## 📚 参考来源
-
-| 来源 | 借鉴 |
-|------|------|
-| **Andrej Karpathy** | 简单优先、精准修改、目标驱动的编码准则 |
-| **Matt Pocock** | grill-with-docs 需求对齐审查、to-issues 垂直切片、.out-of-scope 拒绝记录、领域术语表 |
-| **Manus / planning-with-files** | 文件系统作为外部记忆、进度持久化、5-Question Reboot Test |
