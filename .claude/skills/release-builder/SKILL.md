@@ -1,48 +1,123 @@
 ---
 name: release-builder
-description: 构建、发布和上线收尾。代码审查通过后处理构建验证、版本管理、发布和清理。
+description: 构建验证、版本管理与发布上线。多轮确认发布目标与推送路径后执行门禁与发布，写入状态与 release notes。用户提到发布、上线、deploy、打 tag、发版、merge 到 main、推远程、构建生产包、创建 PR 时，即使未说 release 也必须使用本 skill。
 ---
 
 # Release Builder — 构建发布
 
-## 职责
+**原则：** 先确认方案 → 再跑门禁 → 后执行。门禁任一项失败则报告并 **Stop**，不执行 push/deploy/tag。
 
-处理代码审查通过后的构建、版本管理、发布和上线收尾工作。
+**开场：** 「正在使用 release-builder 处理构建/发布。」
 
-## 触发场景
+## 触发
 
-- Code Review 通过后准备发布
-- 用户说"发布"、"构建"、"上线"、"release"
+`code-review` 通过后；或用户说发布/构建/上线/deploy/打 tag/推远程/合并 main；Dev-Plan 阶段 5 收尾后。
 
-## 工作流程
+**前置：** `<project-name>/` 可构建；建议已完成 code-review（强制跳过须在记录中标注 `review_skipped`）。
 
-### Step 1: 构建验证
-1. 运行项目构建命令，验证构建成功
-2. 确认没有构建警告或错误
-3. 如果构建失败，分析原因并报告
+---
 
-### Step 2: 发布选项
-向用户展示发布选项：
+## Step 1：读上下文 + 多轮确认方案
 
-| 选项 | 适用场景 |
-|------|----------|
-| 创建 Pull Request | 需要合并到主分支 |
-| 直接合并 | 简单项目或独立分支 |
-| 打 Tag 发布 | 需要版本标记 |
-| 打包部署 | 需要部署到服务器 |
+### 1.1 快速读上下文（为提问准备默认值）
 
-### Step 3: 执行发布
-根据用户选择的选项执行发布操作。
+并行扫描：`Tech-Arch.md`（§1.3 部署/托管、构建工具、相关 ADR）、`Dev-Plan.md`（阶段 5、测试/构建命令）、`.claude/.review-status.json`、`Product-Spec-CHANGELOG.md` 最新条目、`<project-name>/package.json` scripts、`<project-name>/docs/guides/build-and-deploy.md`、`git status` / `branch` / `remote -v`。
 
-### Step 4: 清理收尾
-- 删除已合并的本地分支（如适用）
-- 确保工作区干净
-- 记录发布信息
+**Release notes 来源（按序，可合并）：** `docs/releaseNote.md` → `docs/releaseNotes/<version>.md` → `CHANGELOG.md` → `Product-Spec-CHANGELOG.md` → `git log`（自上一 tag）。
 
-## 输出
-- 构建成功/失败报告
-- 发布记录（版本号、时间、变更内容）
-- 项目状态更新
+用户未指定的构建/部署/推送项，默认采用 Tech-Arch / build-and-deploy，标注「（来自 Tech-Arch，可改）」。
 
-## 参考资源
-- [finishing-a-development-branch](../../references/superpowers/finishing-a-development-branch.md) — 分支完成流程
+### 1.2 多轮确认（本步核心，确认完才进入 Step 2）
+
+每轮复述选择并问「是否正确？」；全部完成后输出 **发布方案确认**，等用户回复 **「开始执行」** 前不得 commit/push/deploy/tag。
+
+| 轮次 | 确认内容 |
+|------|---------|
+| **1 目标** | A 仅构建 / B 分支集成(PR·merge) / C 打 tag / D 部署 / E 组合；版本号；变更范围 |
+| **2 构建** | 构建命令与产物路径；是否加 lint/类型检查 |
+| **3 推送**（含 B/C/D/E） | 基准分支；集成方式(本地 merge / PR / 仅 push / 不碰 git)；**remote、目标分支、是否 --tags**；CI 触发分支/workflow |
+| **4 部署**（含 D/E） | 平台与环境(preview/staging/prod)；部署命令；发布后验证方式 |
+
+**确认摘要（示例）：**
+
+```
+目标 / 版本 / 构建命令→产物 / Git与推送(remote·分支·--tags) / 部署 / release notes 来源 / 审查结论
+```
+
+---
+
+## Step 2：门禁验证（按方案执行，失败即 Stop）
+
+仅跑方案中需要的项；**任一项失败 → 输出报告并 Stop，不进入 Step 3。**
+
+| 门禁 | 规则 |
+|------|------|
+| **审查** | `.review-status.json`：`PASS` 继续；`CONDITIONAL_PASS` 须确认 Important 已修；`FAIL`/缺失 → Stop（除非用户声明跳过） |
+| **测试** | 从 Dev-Plan / build-and-deploy / package scripts 取命令执行 |
+| **构建** | 方案要求时执行；失败 Stop；warning 须用户接受 |
+| **工作区** | 未提交变更仅提示；含 `.env`/密钥 → Stop |
+
+---
+
+## Step 3：执行
+
+用户已说「开始执行」且门禁通过后，按确认方案操作。分支集成参考 [finishing-a-development-branch](../../references/superpowers/finishing-a-development-branch.md)。
+
+| 目标 | 要点 |
+|------|------|
+| A 仅构建 | 输出构建报告即可 |
+| B 集成 | merge 后在合并结果再测；PR 用 `gh pr create`；push 严格按确认的 remote/分支 |
+| C 版本 | `git tag -a v<x>`；仅确认后才 `git push` tag；可选 `gh release create` |
+| D 部署 | 按 build-and-deploy；Vercel 默认 preview，**生产须明确要求** |
+| 收尾 | 按需删已合并分支；报告 `git status` |
+
+---
+
+## Step 4：发布记录与状态
+
+### 4.1 发布记录
+
+写入确认的 release note 路径（缺省 `docs/releaseNote.md` 或 `docs/releaseNotes/v<version>.md`），并视惯例更新 `CHANGELOG.md`。
+
+```markdown
+# Release v<version>
+- 时间 / 类型(build|pr|merge|tag|deploy) / Git(branch@sha→remote/branch)
+- 构建·测试·部署(URL) / 审查结论
+## 变更摘要（来自 changelog/releaseNote/git log，禁止编造）
+### 新增 / 修复 / 其他
+## 验证清单 [ ]测试 [ ]构建 [ ]部署 [ ]远程符合预期
+```
+
+### 4.2 `.claude/.release-status.json`（每次结束必写）
+
+```json
+{
+  "last_release": "<ISO8601>",
+  "version": "v1.0.0",
+  "release_type": "build-only|pr|merge|tag|deploy|combined",
+  "status": "SUCCESS|FAILED|ABORTED",
+  "git": { "branch": "", "remote": "", "target_branch": "", "commit": "", "tag": "", "pr_url": "" },
+  "build": { "command": "", "success": true },
+  "test": { "command": "", "success": true },
+  "deploy": { "environment": null, "url": "", "success": true },
+  "review": { "conclusion": "PASS|CONDITIONAL_PASS|skipped", "last_review": "" },
+  "release_notes_path": [],
+  "failure_reason": ""
+}
+```
+
+### 4.3 `progress.json`（成功时）
+
+`current_phase`: `released`；`milestones` 追加 `✓ v<version> 发布于 <date>`。
+
+---
+
+## 红线
+
+**禁止：** 门禁失败仍 push/deploy；未经同意 commit/push/--tags/force push/生产部署；未经确认删分支或丢弃提交；发布含密钥文件；改 git config；擅自 `--no-verify`。
+
+**必须：** 先完成 Step 1 确认再跑门禁与执行；推送路径与 remote/分支须明确（缺省用 Tech-Arch 并标明）；merge 后再测；结束写 `.release-status.json`；变更摘要可追溯 changelog/releaseNote/git log。
+
+## 参考
+
+`Tech-Arch.md` · `<project-name>/docs/guides/build-and-deploy.md` · `code-review`（`.review-status.json`）· [finishing-a-development-branch](../../references/superpowers/finishing-a-development-branch.md)

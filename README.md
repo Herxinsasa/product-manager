@@ -15,47 +15,60 @@ Skill 管流程  ·  Agent 管执行  ·  Hook 负责兜底  · Feedback 管成�
 | 工具 | 适合谁 | 一句话 |
 |------|--------|--------|
 | **Superpowers** | 需要工程纪律的团队 | "不脑暴不许写代码" — 强制流程警察 |
+| **GSD** | Solo dev 0→1 快速出功能 | 规范驱动，每个阶段独立上下文，长会话输出质量不下降 |
 | **GStack** | Solo founder 快速出 MVP | "28 个角色扮演" — 模拟完整团队 |
 | **Product-Manager** | 从想法到交付的产品全生命周期 | "把 `.claude/` 拷到项目里就能用" — 即插即用的产品管家 |
 
 ### 易用性
 
-| | Product-Manager | Superpowers | GStack |
-|---|---------|------------|--------|
-| 安装 | 拷贝 `.claude/` 目录 | 插件市场安装 | `git clone` + `./setup` |
-| 启动 | 零配置，说话就行 | 需了解 16 个命令名 | 需了解 28 个角色名 |
-| 中文 | ✅ 全中文原生 | ❌ | ❌ |
-| 离线 | ✅ 含全部参考文档 | ❌ | ❌ |
+| | Product-Manager | Superpowers | GSD | GStack |
+|---|---------|------------|-----|--------|
+| 安装 | 拷贝 `.claude/` 目录 | 插件市场安装 | `npx get-shit-done-cc@latest` | `git clone` + `./setup` |
+| 启动 | 零配置，说话就行 | 需了解 16 个命令名 | 需了解 6 个 `/gsd-` 命令 | 需了解 28 个角色名 |
+| 中文 | ✅ 全中文原生 | ❌ | ❌ | ❌ |
+| 离线 | ✅ 含全部参考文档 | ❌ | ❌ | ❌ |
 
 > **核心理念：你不必记住 12 个 Skill 名字。说"我想做个日志分析工具"，系统自动路由到对应 Skill。**
 
-### 轻量程度
+### 时间成本
 
-| | Product-Manager | Superpowers | GStack |
-|---|---------|------------|--------|
-| Skill 数 | **12** | 16 | 28 |
-| 学习曲线 | **低** — 自然对话路由 | 中 — 需记流程命令 | **高** — 28 个角色 |
-| 强制步骤 | 建议性 | **强制性**（硬关卡） | 建议性 |
+| | Product-Manager | Superpowers | GSD | GStack |
+|---|---------|------------|-----|--------|
+| 上手时间 | **5 分钟** — 拷目录即用 | **15 分钟** — 装插件 + 了解流程 | **30 分钟** — 学习 6 命令 + 规范驱动思维 | **1 小时** — 28 个角色逐个了解 |
+| 从零到首个 PRD | **10 分钟** — 自然对话驱动 | 20 分钟 — 需主动调 brainstorming | 25 分钟 — /gsd-new-project 后交互 | 20 分钟 — /office-hours |
+| Token 消耗 | **低** — 按需加载 Skill，无冗余上下文 | 中 — 元技能自动加载 | 较高 — 多阶段每阶段独立上下文 | 中高 — 多角色审查累加 |
+
+### 使用成本
+
+| | Product-Manager | Superpowers | GSD | GStack |
+|---|---------|------------|-----|--------|
+| 依赖 | Claude Code | Claude Code | Claude Code / 14+ 运行时 | Claude Code / 8+ 运行时 |
+| 维护成本 | **低** — 纯 Markdown，无运行时依赖 | 低 — 插件生态更新 | 中 — 65+ 版本快速迭代 | 中 — 角色 prompt 需跟进 AI 能力变化 |
+| 定制能力 | ✅ **自建项目** — 纯 Markdown，任何人都可提思路优化、Fork 定制 | ❌ 需跟随插件更新节奏 | ❌ 需跟随框架更新节奏 | ❌ 需跟随框架更新节奏 |
 
 ### 流程完整度
 
-| 阶段 | Product-Manager | Superpowers | GStack |
-|------|---------|------------|--------|
-| 需求 | 5 维度澄清 + 结构化思考 | brainstorming | /office-hours |
-| 设计 | 6 维度视觉 + 逐模块 UE + 设计稿 | ❌ | /design-consultation |
-| 架构 | ADR + 复用搜索 |   | /plan-eng-review |
-| 开发 | 子 Agent 隔离 + Karpathy 准则 | TDD 强制 | 直接写 |
-| 审查 | 代码 + 视觉一致性 | 对齐 | /review |
-| 进化 | 反馈 → 规则升级 | ❌ | ❌ |
+| 阶段 | Product-Manager | Superpowers | GSD | GStack |
+|------|---------|------------|-----|--------|
+| 需求 | 5 维度澄清 + 结构化思考 | brainstorming | /gsd-discuss-phase | /office-hours |
+| 设计 | 6 维度视觉 + 逐模块 UE + 设计稿 | ❌ | ❌ | /design-consultation |
+| 架构 | ADR + 复用搜索 | 一般 | ❌ | /plan-eng-review |
+| 开发 | 子 Agent 隔离 + Karpathy 准则 | TDD 强制 | 波次并行 + 原子 commit | 直接写 |
+| 测试 | 重现用例 | TDD 原生 | /gsd-verify-work | /qa 浏览器测试 |
+| 审查 | 代码 + 视觉一致性 | 对齐审查 | /gsd-verify-work | /review |
+| 发布 | 构建 + 部署 | 分支完成 | /gsd-ship | /ship + /canary |
+| 进化 | 反馈 → 规则升级 | ❌ | ❌ | ❌ |
 
 ### 独特能力
 
-| 能力 | Product-Manager | Superpowers | GStack |
-|------|---------|------------|--------|
-| 设计到代码追溯 | MCP > PNG > 文字规范 | ❌ | ❌ |
-| 领域术语约束 | 术语表 → 代码命名 | ❌ | ❌ |
-| Session 回档 | progress.json | worktree | ❌ |
-| Bug 根因归因 | 分类 + 进化反馈 | ❌ | ❌ |
+| 能力 | Product-Manager | Superpowers | GSD | GStack |
+|------|---------|------------|-----|--------|
+| 设计到代码追溯 | ✅ MCP > PNG > 文字 | ❌ | ❌ | ❌ |
+| 领域术语约束 | ✅ 术语表 → 代码命名 | ❌ | ❌ | ❌ |
+| Session 回档 | ✅ progress.json | ✅ worktree | ✅ STATE.md + CONTEXT.md | ❌ |
+| Bug 根因归因 | ✅ 分类 + 进化反馈 | ❌ | ❌ | ❌ |
+| 并行执行 | ❌ | ✅ sub-agent | ✅ 波次并行 | ❌ |
+| 多运行时 | ❌ Claude Code | ❌ Claude Code | ✅ 14+ | ✅ 8+ |
 
 ### 诚实劣势
 
@@ -64,20 +77,24 @@ Skill 管流程  ·  Agent 管执行  ·  Hook 负责兜底  · Feedback 管成�
 | 无自动化测试框架 | Superpowers 强制 TDD |
 | 无安全审查 | GStack /cso (OWASP + STRIDE) |
 | 无浏览器自动化 | GStack 真实 Chromium 点击 |
+| 无并行任务执行 | GSD 波次并行 + 原子 commit |
 | 无发布流水线全自动 | GStack /ship → /canary |
+| 社区生态刚起步 | Superpowers 107K Stars / GSD 59K Stars / GStack 88K Stars |
 
 ### 适合谁
 
 ```
 ✅ 从模糊想法开始，一步步走完产品开发全流程
-✅ 不想记 28 个角色名，只想自然对话
+✅ 不想记命令名和角色名，只想自然对话
 ✅ 需要中文原生体验 + 离线可用
 ✅ 需要设计稿（Figma/Pencil）和代码之间的追溯
 ✅ Session 断了能恢复进度
+✅ 团队需要统一的领域术语和文档规范
 
 ❌ 需要 TDD 自动强制执行 → Superpowers
+❌ 需要波次并行任务 + 14+ 运行时 → GSD
 ❌ 需要真实浏览器自动化测试 → GStack
-❌ 需要发布流水线全自动 → GStack
+❌ 老项目维护，不需要产品规划流程 → 直接用 Claude Code
 ```
 
 ---
@@ -247,7 +264,7 @@ release-builder --> 构建发布
 
 ---
 
-## 🪝 Hooks
+## ⚡ Hooks
 
 | Hook | 事件 | 功能 |
 |------|------|------|
@@ -330,8 +347,22 @@ code-review 视觉一致性检查清单
     │   ├── code-reviewer.md
     │   ├── feedback-observer.md
     │   └── evolution-runner.md
+    ├── docs/                     # 项目文档模板（13 个文件）
+    │   ├── README.md
+    │   ├── requirements/
+    │   ├── design/
+    │   ├── architecture/
+    │   ├── modules/
+    │   └── guides/
     ├── feedback/                 # 反馈存储
     │   └── store.json
+    ├── memory/                   # 持久化记忆
+    ├── references/               # 外部参考文档
+    │   ├── superpowers/
+    │   ├── andrej-karpathy-skills/
+    │   ├── anthropics-skills/
+    │   ├── code-review-skill/
+    │   └── ui-ux-pro-max-skill/
     ├── skills/                   # 12 个 Skill
     │   ├── product-spec-builder/
     │   ├── design-brief-builder/

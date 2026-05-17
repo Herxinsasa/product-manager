@@ -26,15 +26,25 @@
 └── .claude/
     ├── CLAUDE.md                  # 本文件 - 主控
     ├── EVOLUTION.md               # 进化规则
+    ├── progress.json              # Session 进度存档
     ├── settings.local.json        # 权限与 Hooks 配置
     ├── agents/                    # Sub-agents
     │   ├── implementer.md
     │   ├── code-reviewer.md
     │   ├── feedback-observer.md
     │   └── evolution-runner.md
+    ├── docs/                      # 项目文档模板（13 个文件）
+    │   ├── README.md
+    │   ├── requirements/
+    │   ├── design/
+    │   ├── architecture/
+    │   ├── modules/
+    │   └── guides/
     ├── feedback/                  # 反馈存储
     │   └── store.json
-    ├── skills/                    # 技能体系
+    ├── memory/                    # 持久化记忆
+    ├── references/                # 外部参考文档
+    ├── skills/                    # 技能体系（12 个 Skill）
     │   ├── product-spec-builder/
     │   ├── design-brief-builder/
     │   ├── design-maker/
